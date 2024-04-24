@@ -19,7 +19,7 @@
     <div class="mb-4">
       <div class="w-[10rem] text-lg w-30 font-bold text-gray-600 sm:inline-block">Skills:</div>
       <span class="text-gray-500 text-lg">
-        <span v-for="(skill, index) in accountDetails.skills" :key="index">{{ skill }}, </span>
+        <span v-for="(skill, index) in accountDetails.skills" :key="index">{{ skill }}<span v-if="index === (accountDetails?.skills?.length)-1">,</span></span>
       </span>
     </div>
   </div>
