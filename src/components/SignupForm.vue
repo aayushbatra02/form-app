@@ -98,11 +98,11 @@ export default {
   components: { AccountDetails },
   data() {
     return {
-      email: "null@sss.ddd",
-      password: "ss@34R5zxcds",
+      email: null,
+      password: null,
       role: "Web Developer",
       skillsInput: "",
-      skills: ["test"],
+      skills: [],
       isTermsAndConditionedChecked: true,
       editIndex: null,
       emailErrorMessage: null,
