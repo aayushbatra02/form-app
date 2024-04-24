@@ -103,7 +103,7 @@ export default {
       role: "Web Developer",
       skillsInput: "",
       skills: [],
-      isTermsAndConditionedChecked: true,
+      isTermsAndConditionedChecked: false,
       editIndex: null,
       emailErrorMessage: null,
       passwordErrorMessage: null,
