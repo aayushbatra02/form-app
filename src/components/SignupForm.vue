@@ -1,21 +1,23 @@
 <template>
   <div
-    class="border border-8 border-grey p-6 m-4 rounded md:w-[60%] lg:w-[40%] xl:w-[35%] md:m-auto md:mt-8"
+    class="border border-8 border-grey p-6 2xl:p-8 m-4 rounded md:w-[60%] lg:w-[40%] xl:w-[35%] md:m-auto md:mt-8 2xl:mt-10"
   >
     <div class="mb-4">
-      <label class="text-gray-400 font-bold block" for="email">EMAIL:</label>
+      <label class="text-gray-400 font-bold block 2xl:text-lg" for="email"
+        >EMAIL:</label
+      >
       <input
         v-model.trim="formData.email"
         class="border border-grey my-2 px-3 py-2 w-[100%]"
         type="email"
         @input="checkEmail"
       />
-      <div v-if="emailErrorMessage" class="text-red-700">
+      <div v-if="emailErrorMessage" class="text-red-700 sm:text-base">
         {{ emailErrorMessage }}
       </div>
     </div>
     <div class="mb-4">
-      <label class="text-gray-400 font-bold block" for="password"
+      <label class="text-gray-400 font-bold block 2xl:text-lg" for="password"
         >PASSWORD:</label
       >
       <input
@@ -24,27 +26,34 @@
         type="password"
         @input="checkPassword"
       />
-      <div v-if="passwordErrorMessage" class="text-red-700">
+      <div v-if="passwordErrorMessage" class="text-red-700 sm:text-base">
         {{ passwordErrorMessage }}
       </div>
     </div>
     <div class="mb-4">
-      <label class="text-gray-400 font-bold block" for="Role">ROLE:</label>
+      <label class="text-gray-400 font-bold block 2xl:text-lg" for="Role"
+        >ROLE:</label
+      >
       <select
         v-model="formData.role"
-        class="border border-grey my-2 px-3 py-2 w-[100%] text-gray-500"
+        class="border border-grey my-2 px-3 py-2 w-[100%]"
         @change="checkRole"
       >
         <option disabled>Select a Role</option>
         <option value="Web Developer">Web Developer</option>
         <option value="Web Designer">Web Designer</option>
       </select>
-      <div v-if="roleErrorMessage" class="text-red-700">
+      <div
+        v-if="roleErrorMessage"
+        class="text-red-700 sm:text-base sm:text-base"
+      >
         {{ roleErrorMessage }}
       </div>
     </div>
     <div>
-      <label class="text-gray-400 font-bold block" for="skills">SKILLS:</label>
+      <label class="text-gray-400 font-bold block 2xl:text-lg" for="skills"
+        >SKILLS:</label
+      >
       <input
         v-model.trim="formData.skillsInput"
         @keyup="addSkill"
@@ -52,7 +61,10 @@
         type="text"
         ref="skillsInputField"
       />
-      <div v-if="skillErrorMessage" class="text-red-700">
+      <div
+        v-if="skillErrorMessage"
+        class="text-red-700 sm:text-base sm:text-base"
+      >
         {{ skillErrorMessage }}
       </div>
     </div>
@@ -67,26 +79,31 @@
         <button @click="deleteSkill(id)" class="text-red-500">x</button>
       </button>
     </div>
-    <div class="mb-2 flex gap-2">
+    <div class="mb-2 flex gap-4 items:center">
       <input
         v-model="formData.isTermsAndConditionedChecked"
-        class="cursor-pointer w-4 h-4"
+        class="cursor-pointer w-4 h-4 2xl:w-5 2xl:h-5"
         id="checkbox"
         type="checkbox"
         @change="validateTermsAndCondition"
         ref="skillsInput"
       />
-      <label class="text-gray-400 font-bold text-xs lg:text-sm" for="checkbox"
+      <label
+        class="text-gray-400 font-bold text-xs lg: sm:text-base"
+        for="checkbox"
         >ACCEPT TERMS AND CONDITIONS</label
       >
     </div>
-    <div v-if="termsAndConditionErrorMessage" class="text-red-700">
+    <div
+      v-if="termsAndConditionErrorMessage"
+      class="text-red-700 sm:text-base sm:text-base"
+    >
       {{ termsAndConditionErrorMessage }}
     </div>
-    <div class="mt-8 xl:mt-12 flex justify-center">
+    <div class="mt-8 xl:mt-10 flex justify-center">
       <button
         @click="validateForm"
-        class="bg-blue-500 py-2 px-4 rounded-[3rem] text-white"
+        class="bg-blue-500 py-2 2xl:py-3 px-4 2xl:px-6 rounded-[3rem] text-white"
       >
         Create an Account
       </button>
