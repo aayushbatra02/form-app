@@ -147,7 +147,7 @@ export default {
     },
     deleteSkill(id) {
       this.skills = this.skills.filter((skill, index) => index !== id);
-      if (this.editIndex) {
+      if (this.editIndex || this.editIndex === 0) {
         this.skillsInput = "";
         this.editIndex = null;
       }
