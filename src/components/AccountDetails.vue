@@ -7,9 +7,7 @@
       <span class="text-gray-500 text-lg">{{ accountDetails.email }}</span>
     </div>
     <div class="mb-4 flex flex-col sm:flex-row">
-      <div class="w-[10rem] text-lg w-30 font-bold text-gray-600">
-        PASSWORD
-      </div>
+      <div class="w-[10rem] text-lg w-30 font-bold text-gray-600">PASSWORD</div>
       <span class="text-gray-500 text-lg">{{ accountDetails.password }}</span>
     </div>
     <div class="mb-4 flex flex-col sm:flex-row">
@@ -33,8 +31,5 @@
 <script>
 export default {
   props: ["accountDetails"],
-  mounted() {
-    console.log(this.accountDetails);
-  },
 };
 </script>

@@ -2,10 +2,10 @@
   <div
     class="border border-8 border-grey p-6 m-4 rounded md:w-[60%] lg:w-[40%] xl:w-[35%] md:m-auto md:mt-8"
   >
-    <div class="mb-4 sm:mb-5 md:mb-6 lg:mb-7 xl:mb-8">
+    <div class="mb-4">
       <label class="text-gray-400 font-bold block" for="email">EMAIL:</label>
       <input
-        v-model.trim="email"
+        v-model.trim="formData.email"
         class="border border-grey my-2 px-3 py-2 w-[100%]"
         type="email"
         @input="checkEmail"
@@ -14,12 +14,12 @@
         {{ emailErrorMessage }}
       </div>
     </div>
-    <div class="mb-4 sm:mb-5 md:mb-6 lg:mb-7 xl:mb-8">
+    <div class="mb-4">
       <label class="text-gray-400 font-bold block" for="password"
         >PASSWORD:</label
       >
       <input
-        v-model="password"
+        v-model="formData.password"
         class="border border-grey my-2 px-3 py-2 w-[100%]"
         type="password"
         @input="checkPassword"
@@ -28,10 +28,10 @@
         {{ passwordErrorMessage }}
       </div>
     </div>
-    <div class="mb-4 sm:mb-5 md:mb-6 lg:mb-7 xl:mb-8">
+    <div class="mb-4">
       <label class="text-gray-400 font-bold block" for="Role">ROLE:</label>
       <select
-        v-model="role"
+        v-model="formData.role"
         class="border border-grey my-2 px-3 py-2 w-[100%] text-gray-500"
         @change="checkRole"
       >
@@ -46,7 +46,7 @@
     <div>
       <label class="text-gray-400 font-bold block" for="skills">SKILLS:</label>
       <input
-        v-model.trim="skillsInput"
+        v-model.trim="formData.skillsInput"
         @keyup="addSkill"
         class="border border-grey my-2 px-3 py-2 w-[100%]"
         type="text"
@@ -56,13 +56,10 @@
         {{ skillErrorMessage }}
       </div>
     </div>
-
-    <div
-      class="mb-4 sm:mb-5 md:mb-6 lg:mb-7 xl:mb-8 flex flex-row flex-wrap gap-4 mt-2"
-    >
+    <div class="mb-4 flex flex-row flex-wrap gap-4 mt-2">
       <button
         @click.self="editSkill(id)"
-        v-for="(skill, id) in skills"
+        v-for="(skill, id) in formData.skills"
         class="bg-gray-200 px-4 py-1 rounded-2xl text-gray-500 font-bold flex gap-2"
         :key="id"
       >
@@ -72,11 +69,11 @@
     </div>
     <div class="mb-2 flex gap-2">
       <input
-        v-model="isTermsAndConditionedChecked"
+        v-model="formData.isTermsAndConditionedChecked"
         class="cursor-pointer w-4 h-4"
         id="checkbox"
         type="checkbox"
-        @change="checkTermsAndConditionValidation"
+        @change="validateTermsAndCondition"
         ref="skillsInput"
       />
       <label class="text-gray-400 font-bold text-xs lg:text-sm" for="checkbox"
@@ -95,10 +92,7 @@
       </button>
     </div>
   </div>
-  <account-details
-    v-if="isAccountCreated"
-    :accountDetails="accountDetails"
-  ></account-details>
+  <accountDetails v-if="isAccountCreated" :accountDetails="accountDetails" />
 </template>
 
 <script>
@@ -108,13 +102,15 @@ export default {
   components: { AccountDetails },
   data() {
     return {
-      email: null,
-      password: null,
-      role: "Select a Role",
-      skillsInput: "",
-      skills: [],
-      isTermsAndConditionedChecked: false,
-      editIndex: null,
+      formData: {
+        email: null,
+        password: null,
+        role: "Select a Role",
+        skillsInput: "",
+        isTermsAndConditionedChecked: false,
+        skills: [],
+      },
+      skillEditIndex: null,
       doValidation: false,
       emailErrorMessage: null,
       passwordErrorMessage: null,
@@ -127,35 +123,41 @@ export default {
   },
   methods: {
     addSkill(e) {
-      if (this.skillsInput.includes(",")) {
-        let skill = this.skillsInput.split("");
+      if (this.formData.skillsInput.includes(",")) {
+        let skill = this.formData.skillsInput.split("");
         skill = skill.filter((char) => char !== ",");
-        this.skillsInput = skill.join("");
+        this.formData.skillsInput = skill.join("");
       }
-      if (this.skillsInput !== "" && this.skillsInput !== ",") {
+      if (
+        this.formData.skillsInput !== "" &&
+        this.formData.skillsInput !== ","
+      ) {
         if (e.key === "Enter" || e.key === ",") {
-          if (this.editIndex || this.editIndex === 0) {
-            this.skills[this.editIndex] = this.skillsInput;
+          if (this.skillEditIndex || this.skillEditIndex === 0) {
+            this.formData.skills[this.skillEditIndex] =
+              this.formData.skillsInput;
           } else {
-            this.skills.push(this.skillsInput);
+            this.formData.skills.push(this.formData.skillsInput);
           }
-          this.skillsInput = "";
-          this.editIndex = null;
+          this.formData.skillsInput = "";
+          this.skillEditIndex = null;
         }
       }
       this.checkSkills();
     },
     deleteSkill(id) {
-      this.skills = this.skills.filter((skill, index) => index !== id);
-      if (this.editIndex || this.editIndex === 0) {
-        this.skillsInput = "";
-        this.editIndex = null;
+      this.formData.skills = this.formData.skills.filter(
+        (skill, index) => index !== id
+      );
+      if (this.skillEditIndex || this.skillEditIndex === 0) {
+        this.formData.skillsInput = "";
+        this.skillEditIndex = null;
       }
       this.checkSkills();
     },
     editSkill(id) {
-      this.skillsInput = this.skills[id];
-      this.editIndex = id;
+      this.formData.skillsInput = this.formData.skills[id];
+      this.skillEditIndex = id;
       this.$refs.skillsInputField.focus();
     },
     validateEmail(email) {
@@ -171,9 +173,9 @@ export default {
     },
     checkEmail() {
       if (this.doValidation) {
-        if (!this.email) {
+        if (!this.formData.email) {
           this.emailErrorMessage = "Email is required";
-        } else if (!this.validateEmail(this.email)) {
+        } else if (!this.validateEmail(this.formData.email)) {
           this.emailErrorMessage = "Please enter a valid email";
         } else {
           this.emailErrorMessage = null;
@@ -182,10 +184,10 @@ export default {
     },
     checkPassword() {
       if (this.doValidation) {
-        if (!this.password) {
+        if (!this.formData.password) {
           this.passwordErrorMessage = "Password is required";
-        } else if (!this.validatePassword(this.password)) {
-          this.passwordErrorMessage = `min 8 letters, at least a symbol, upper and lower case letters and a number`;
+        } else if (!this.validatePassword(this.formData.password)) {
+          this.passwordErrorMessage = `min 8 letters, at least a special character, upper and lower case letters and a number`;
         } else {
           this.passwordErrorMessage = null;
         }
@@ -193,7 +195,7 @@ export default {
     },
     checkSkills() {
       if (this.doValidation) {
-        if (this.skills.length === 0) {
+        if (this.formData.skills.length === 0) {
           this.skillErrorMessage = "Please add minimum one skill";
         } else {
           this.skillErrorMessage = null;
@@ -202,17 +204,16 @@ export default {
     },
     checkRole() {
       if (this.doValidation) {
-        console.log("checkingRole ", this.role);
-        if (this.role === "Select a Role") {
+        if (this.formData.role === "Select a Role") {
           this.roleErrorMessage = "Please select a role";
         } else {
           this.roleErrorMessage = null;
         }
       }
     },
-    checkTermsAndConditionValidation() {
+    validateTermsAndCondition() {
       if (this.doValidation) {
-        if (!this.isTermsAndConditionedChecked) {
+        if (!this.formData.isTermsAndConditionedChecked) {
           this.termsAndConditionErrorMessage =
             "Please accept Terms and Conditions";
         } else {
@@ -225,7 +226,8 @@ export default {
       this.checkEmail();
       this.checkPassword();
       this.checkSkills();
-      this.checkRole(), this.checkTermsAndConditionValidation();
+      this.checkRole();
+      this.validateTermsAndCondition();
       if (
         !this.emailErrorMessage &&
         !this.passwordErrorMessage &&
@@ -235,21 +237,18 @@ export default {
       ) {
         this.isAccountCreated = true;
         this.accountDetails = {
-          email: this.email,
-          password: this.password,
-          role: this.role,
-          skills: this.skills,
+          email: this.formData.email,
+          password: this.formData.password,
+          role: this.formData.role,
+          skills: this.formData.skills,
         };
-        this.email = null;
-        this.password = null;
-        this.role = "Select a Role";
-        this.skills = [];
-        this.isTermsAndConditionedChecked = false;
+        this.formData.email = null;
+        this.formData.password = null;
+        this.formData.role = "Select a Role";
+        this.formData.skills = [];
+        this.formData.isTermsAndConditionedChecked = false;
       }
     },
-  },
-  updated() {
-    console.log({ Role: this.role });
   },
 };
 </script>
