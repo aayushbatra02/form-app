@@ -1,18 +1,14 @@
 <template>
-  <div>{{title}}</div>
+  <signupForm />
 </template>
 
 <script>
+import SignupForm from "./components/SignupForm";
 
 export default {
- data(){
-  return {
-    title:'Hello world'
-  }
- }}
+  components: { SignupForm },
+};
 </script>
 
 <style>
-
-
 </style>
