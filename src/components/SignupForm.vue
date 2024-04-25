@@ -37,7 +37,7 @@
       <select
         v-model="formData.role"
         class="border border-grey my-2 px-3 py-2 w-[100%]"
-        @change="checkRole"
+        @change="checkRoles"
       >
         <option disabled>Select a Role</option>
         <option value="Web Developer">Web Developer</option>
@@ -222,7 +222,7 @@ export default {
         }
       }
     },
-    checkRole() {
+    checkRoles() {
       if (this.formValidation) {
         if (this.formData.role === "Select a Role") {
           this.roleErrorMessage = "Please select a role";
@@ -246,7 +246,7 @@ export default {
       this.checkEmail();
       this.checkPassword();
       this.checkSkills();
-      this.checkRole();
+      this.checkRoles();
       this.validateTermsAndCondition();
       if (
         !this.emailErrorMessage &&
