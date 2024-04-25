@@ -111,14 +111,19 @@ export default {
         skills: [],
       },
       skillEditIndex: null,
-      doValidation: false,
+      formValidation: false,
       emailErrorMessage: null,
       passwordErrorMessage: null,
       skillErrorMessage: null,
       roleErrorMessage: null,
       termsAndConditionErrorMessage: null,
       isAccountCreated: false,
-      accountDetails: null,
+      accountDetails: {
+        email: null,
+        password: null,
+        role: null,
+        skills: null,
+      },
     };
   },
   methods: {
@@ -161,18 +166,16 @@ export default {
       this.$refs.skillsInputField.focus();
     },
     validateEmail(email) {
-      return String(email)
-        .toLowerCase()
-        .match(
-          /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
-        );
+      let regex =
+        /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+      return regex.test(email);
     },
     validatePassword(password) {
-      var re = /^(?=.*\d)(?=.*[!@#$%^&*])(?=.*[a-z])(?=.*[A-Z]).{8,}$/;
-      return re.test(password);
+      let regex = /^(?=.*\d)(?=.*[!@#$%^&*])(?=.*[a-z])(?=.*[A-Z]).{8,}$/;
+      return regex.test(password);
     },
     checkEmail() {
-      if (this.doValidation) {
+      if (this.formValidation) {
         if (!this.formData.email) {
           this.emailErrorMessage = "Email is required";
         } else if (!this.validateEmail(this.formData.email)) {
@@ -183,7 +186,7 @@ export default {
       }
     },
     checkPassword() {
-      if (this.doValidation) {
+      if (this.formValidation) {
         if (!this.formData.password) {
           this.passwordErrorMessage = "Password is required";
         } else if (!this.validatePassword(this.formData.password)) {
@@ -194,7 +197,7 @@ export default {
       }
     },
     checkSkills() {
-      if (this.doValidation) {
+      if (this.formValidation) {
         if (this.formData.skills.length === 0) {
           this.skillErrorMessage = "Please add minimum one skill";
         } else {
@@ -203,7 +206,7 @@ export default {
       }
     },
     checkRole() {
-      if (this.doValidation) {
+      if (this.formValidation) {
         if (this.formData.role === "Select a Role") {
           this.roleErrorMessage = "Please select a role";
         } else {
@@ -212,7 +215,7 @@ export default {
       }
     },
     validateTermsAndCondition() {
-      if (this.doValidation) {
+      if (this.formValidation) {
         if (!this.formData.isTermsAndConditionedChecked) {
           this.termsAndConditionErrorMessage =
             "Please accept Terms and Conditions";
@@ -222,7 +225,7 @@ export default {
       }
     },
     validateForm() {
-      this.doValidation = true;
+      this.formValidation = true;
       this.checkEmail();
       this.checkPassword();
       this.checkSkills();
@@ -236,12 +239,9 @@ export default {
         !this.roleErrorMessage
       ) {
         this.isAccountCreated = true;
-        this.accountDetails = {
-          email: this.formData.email,
-          password: this.formData.password,
-          role: this.formData.role,
-          skills: this.formData.skills,
-        };
+        for (const key in this.accountDetails) {
+          this.accountDetails[key] = this.formData[key];
+        }
         this.formData.email = null;
         this.formData.password = null;
         this.formData.role = "Select a Role";
